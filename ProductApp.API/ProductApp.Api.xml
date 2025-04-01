@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProductApp.API</name>
+    </assembly>
+    <members>
+        <member name="T:ProductApp.API.Controllers.ProductController">
+            <summary>
+            Product APIs
+            </summary>
+        </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.#ctor(ProductApp.Application.Interfaces.IProductService)">
+            <summary>
+            Product Controller ctor
+            </summary>
+            <param name="productService"></param>
+        </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.GetProduct(System.Int32)">
+            <summary>
+            API to get product details by its unique identifier
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.CreateProduct(ProductApp.Application.DTOS.ProductDto)">
+            <summary>
+            API to create new product
+            </summary>
+            <param name="productDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.UpdateProduct(System.Int32,ProductApp.Application.DTOS.ProductDto)">
+            <summary>
+            API to update a product
+            </summary>
+            <param name="id"></param>
+            <param name="productDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.DeleteProduct(System.Int32)">
+            <summary>
+            API to delete a product using its unique identifier
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProductApp.API.Extensions.WebAppBuilderExtensions.ConfigureHost(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Configuring Host
+            </summary>
+            <param name="builder"></param>
+        </member>
+    </members>
+</doc>
