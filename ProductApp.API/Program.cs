@@ -19,7 +19,8 @@ builder.Services.AddControllers();
  
 // Configure Entity Framework Core with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+    , b => b.MigrationsAssembly("ProductApp.Infrastructure")));
  
 // Register application services and repositories
 builder.Services.AddScoped<IProductService, ProductService>();
