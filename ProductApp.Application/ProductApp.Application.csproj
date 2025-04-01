@@ -6,7 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup>    
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <ProjectReference Include="../ProductApp.Domain/ProductApp.Domain.csproj" />
     <ProjectReference Include="../ProductApp.Infrastructure/ProductApp.Infrastructure.csproj" />
   </ItemGroup>

@@ -7,6 +7,8 @@ using ProductApp.Infrastructure.Data.Repositories;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using System.Reflection;
+using ProductApp.Application.Validators;
+using FluentValidation.AspNetCore;
 
 namespace ProductApp.API.Extensions
 {
@@ -15,7 +17,8 @@ namespace ProductApp.API.Extensions
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
             
             // Configure Entity Framework Core with SQL Server
             services.AddDbContext<ApplicationDbContext>(options =>
