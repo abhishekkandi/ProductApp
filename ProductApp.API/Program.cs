@@ -1,9 +1,45 @@
+using Microsoft.EntityFrameworkCore;
+using ProductApp.Infrastructure.Data;
+using ProductApp.Application.Interfaces;
+using ProductApp.Application.Services;
+using ProductApp.Infrastructure.Data.Repositories;
+using Microsoft.OpenApi.Models;
+using Serilog;
+ 
 var builder = WebApplication.CreateBuilder(args);
-
+ 
+// Configure Serilog for logging
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+});
+ 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+ 
+// Configure Entity Framework Core with SQL Server
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+ 
+// Register application services and repositories
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+ 
+// Configure API versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+});
+ 
+// Configure Swagger/OpenAPI
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Product API", Version = "v1" });
+});
+ 
+// Configure CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -13,44 +49,29 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-
+ 
 var app = builder.Build();
-
+ 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product API v1"));
 }
-
-Console.WriteLine("Configured Cors");
-app.UseCors("AllowAll");
-
+ 
 app.UseHttpsRedirection();
-
-var summaries = new[]
+ 
+app.UseRouting();
+ 
+app.UseCors("AllowAll");
+ 
+app.UseAuthentication();
+app.UseAuthorization();
+ 
+app.UseEndpoints(endpoints =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-Console.WriteLine("Starting Application");
+    endpoints.MapControllers();
+});
+ 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
