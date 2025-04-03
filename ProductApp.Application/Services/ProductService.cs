@@ -53,8 +53,8 @@ namespace ProductApp.Application.Services
             if (product != null)
             {
                 await _unitOfWork.Products.DeleteAsync(product);
-                int result = await _unitOfWork.CompleteAsync();
-                return result > 0;
+                await _unitOfWork.CompleteAsync();
+                return true;
             }
             return false;
         }
