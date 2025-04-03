@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using System.Reflection;
 using ProductApp.Application.Validators;
 using FluentValidation.AspNetCore;
+using ProductApp.Application.Mapping;
+using AutoMapper;
 
 namespace ProductApp.API.Extensions
 {
@@ -28,6 +30,9 @@ namespace ProductApp.API.Extensions
             // Register application services and repositories
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.ConfigureAutoMapper();
             
             // Configure API versioning
             services.AddVersionedApiExplorer(options => {
@@ -53,6 +58,17 @@ namespace ProductApp.API.Extensions
                         .AllowAnyHeader();
                 });
             });
+        }
+
+        public static void ConfigureAutoMapper(this IServiceCollection services)
+        {
+            var mappingConfig = new MapperConfiguration(mc => 
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)
