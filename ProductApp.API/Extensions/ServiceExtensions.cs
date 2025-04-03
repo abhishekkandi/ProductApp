@@ -11,6 +11,7 @@ using ProductApp.Application.Validators;
 using FluentValidation.AspNetCore;
 using ProductApp.Application.Mapping;
 using AutoMapper;
+using ProductApp.API.Filters;
 
 namespace ProductApp.API.Extensions
 {
@@ -19,8 +20,10 @@ namespace ProductApp.API.Extensions
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
-            services.AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+            services.AddControllers(options => {
+                options.Filters.Add<GlobalExceptionFilter>();
+            })
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
             
             // Configure Entity Framework Core with SQL Server
             services.AddDbContext<ApplicationDbContext>(options =>
