@@ -3,7 +3,7 @@ using ProductApp.Infrastructure.Data.Configurations;
 using ProductApp.Infrastructure.Data;
 using ProductApp.Infrastructure.Data.Repositories;
 
-namespace ProductApp.Tests
+namespace ProductApp.Infrastructure.Tests
 {
     public class ProductRepositoryTests
     {

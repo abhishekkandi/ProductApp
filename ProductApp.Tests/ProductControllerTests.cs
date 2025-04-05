@@ -4,7 +4,7 @@ using ProductApp.API.Controllers;
 using ProductApp.Application.Interfaces; 
 using ProductApp.Application.DTOS;  
 
-namespace ProductApp.Tests
+namespace ProductApp.API.Tests
 {
     public class ProductControllerTests
 {
