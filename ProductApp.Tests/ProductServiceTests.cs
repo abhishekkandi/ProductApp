@@ -94,5 +94,42 @@ namespace ProductApp.Application.Tests
             // Assert
             Assert.True(result);
         }
+        
+
+        [Fact]
+        public async Task GetProductsAsync_ShouldReturnPaginatedProducts_WhenValidParameters()
+        {
+            // Arrange
+            var products = new List<Product>
+            {
+                new Product { Id = 1, ProductName = "Product 1",CreatedBy = "Admin", CreatedOn = DateTime.UtcNow },
+                new Product { Id = 2, ProductName = "Product 2",CreatedBy = "Admin", CreatedOn = DateTime.UtcNow }
+            };
+            _productRepositoryMock.Setup(repo => repo.GetProductsAsync(1, 10))
+                .ReturnsAsync((products, products.Count));
+
+            // Act
+            var result = await _productService.GetProductsAsync(1, 10);
+
+            // Assert
+            Assert.Equal(2, result.TotalCount);
+            Assert.Equal(2, result.Products.Count());
+        }
+
+        [Fact]
+        public async Task GetProductsAsync_ShouldReturnEmpty_WhenNoProductsExist()
+        {
+            // Arrange
+            var products = new List<Product>();
+            _productRepositoryMock.Setup(repo => repo.GetProductsAsync(1, 10))
+                .ReturnsAsync((products, products.Count));
+
+            // Act
+            var result = await _productService.GetProductsAsync(1, 10);
+
+            // Assert
+            Assert.Equal(0, result.TotalCount);
+            Assert.Empty(result.Products);
+        }
     }
 }
