@@ -1,10 +1,12 @@
 using Moq;
 using Microsoft.AspNetCore.Mvc;
 using ProductApp.API.Controllers;
-using ProductApp.Application.Interfaces; // Assuming IProductDtoService is in the Services namespace
-using ProductApp.Application.DTOS;   // Assuming ProductDto is in the Models namespace
+using ProductApp.Application.Interfaces; 
+using ProductApp.Application.DTOS;  
 
-public class ProductControllerTests
+namespace ProductApp.API.Tests
+{
+    public class ProductControllerTests
 {
     private readonly Mock<IProductService> _mockProductDtoService;
     private readonly ProductController _controller;
@@ -89,3 +91,5 @@ public class ProductControllerTests
         Assert.IsType<NoContentResult>(result);
     }
 }
+}
+

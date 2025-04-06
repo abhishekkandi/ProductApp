@@ -6,7 +6,7 @@ using ProductApp.Infrastructure.Data.Configurations;
 using ProductApp.Infrastructure.Data;
 using ProductApp.Infrastructure.Data.Repositories;
 
-namespace ProductApp.Tests
+namespace ProductApp.Application.Tests
 {
     public class ProductServiceTests
     {
