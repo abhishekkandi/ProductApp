@@ -95,5 +95,23 @@ namespace ProductApp.Infrastructure.Tests
             var deletedProduct = await _context.Products.FindAsync(product.Id);
             Assert.Null(deletedProduct);
         }
+
+        [Fact]
+        public async Task GetProductsAsync_ShouldReturnPaginatedProducts_WhenValidParameters()
+        {
+            // Arrange
+            var product = new Product { Id = 11, ProductName = "Test Product", CreatedBy = "Admin" };
+            var product2 = new Product { Id = 12, ProductName = "Test Product2", CreatedBy = "Admin" };
+            var product3 = new Product { Id = 13, ProductName = "Test Product3", CreatedBy = "Admin" };
+            await _context.Products.AddRangeAsync(new List<Product> { product, product2, product3 });
+            await _context.SaveChangesAsync();
+
+            //Act
+            var (products, totalCount) = await _repository.GetProductsAsync(1, 2);
+
+            // Assert
+            Assert.NotEmpty(products);
+        }
+
     }
 }

@@ -1,7 +1,5 @@
 using ProductApp.Infrastructure.Data.Configurations;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ProductApp.Infrastructure.Data;
  
 namespace ProductApp.Infrastructure.Data.Repositories
 {
@@ -18,7 +16,17 @@ namespace ProductApp.Infrastructure.Data.Repositories
         {
             return await _context.Products.FindAsync(id);
         }
- 
+
+        public async Task<(IEnumerable<Product> Products, int TotalCount)> GetProductsAsync(int pageNumber = 1, int pageSize = 10)
+        {
+            var totalCount = await _context.Products.CountAsync();
+            var products = await _context.Products
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (products, totalCount);                
+        }
+        
         public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);

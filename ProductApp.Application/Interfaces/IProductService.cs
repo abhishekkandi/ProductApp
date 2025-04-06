@@ -9,5 +9,6 @@ namespace ProductApp.Application.Interfaces
         Task<ProductDto> CreateProductAsync(ProductDto productDto);
         Task<ProductDto> UpdateProductAsync(int id, ProductDto productDto);
         Task<bool> DeleteProductAsync(int id);
+        Task<PaginatedProductsDto> GetProductsAsync(int pageNumber = 1, int pageSize = 10);
     }
 }

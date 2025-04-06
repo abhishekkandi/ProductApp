@@ -22,6 +22,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:ProductApp.API.Controllers.ProductController.GetProducts(System.Int32,System.Int32)">
+            <summary>
+            API to fetch all products by passiing PageNumber and PageSize
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
         <member name="M:ProductApp.API.Controllers.ProductController.CreateProduct(ProductApp.Application.DTOS.ProductDto)">
             <summary>
             API to create new product
