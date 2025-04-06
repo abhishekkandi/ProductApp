@@ -58,6 +58,18 @@ namespace ProductApp.Application.Services
             }
             return false;
         }
+
+        public async Task<PaginatedProductsDto> GetProductsAsync(int pageNumber = 1, int pageSize = 10)
+        {
+            var paginatedProducts = await _unitOfWork.Products.GetProductsAsync(pageNumber, pageSize);
+            return new PaginatedProductsDto
+            {
+                Products = _mapper.Map<IEnumerable<ProductDto>>(paginatedProducts.Products),
+                TotalCount = paginatedProducts.TotalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
     }
 }
 

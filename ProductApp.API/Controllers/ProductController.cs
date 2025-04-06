@@ -39,7 +39,24 @@ namespace ProductApp.API.Controllers
             }
             return Ok(product);
         }
- 
+
+        /// <summary>
+        /// API to fetch all products by passiing PageNumber and PageSize
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetProducts(int pageNumber = 1, int pageSize = 10)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Page number and page size must be greater than zero.");
+            }
+            var paginatedProducts = await _productService.GetProductsAsync(pageNumber, pageSize);
+            return Ok(paginatedProducts);
+        }
+        
         /// <summary>
         /// API to create new product
         /// </summary>
