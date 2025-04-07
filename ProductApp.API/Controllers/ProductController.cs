@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProductApp.Application.DTOS;
 using ProductApp.Application.Interfaces;
-using System.Threading.Tasks;
- 
+using System.Net;
+using Serilog;
+
 namespace ProductApp.API.Controllers
 {
     /// <summary>
@@ -14,7 +16,9 @@ namespace ProductApp.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
- 
+        private readonly Serilog.ILogger _logger;
+        private Stopwatch _stopwatch;
+
         /// <summary>
         /// Product Controller ctor
         /// </summary>
@@ -22,6 +26,8 @@ namespace ProductApp.API.Controllers
         public ProductController(IProductService productService)
         {
             _productService = productService;
+            _stopwatch = new Stopwatch();
+            _logger = Log.Logger.ForContext<ProductController>();
         }
  
         /// <summary>
@@ -30,9 +36,14 @@ namespace ProductApp.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProduct(int id)
         {
+            _stopwatch.Start();
             var product = await _productService.GetProductByIdAsync(id);
+            _stopwatch.Stop();
+            _logger.Information(string.Format("Get Product By Id API | Time Elapsed: {0}ms", _stopwatch.ElapsedMilliseconds));
             if (product == null)
             {
                 return NotFound();
@@ -47,6 +58,8 @@ namespace ProductApp.API.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(PaginatedProductsDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetProducts(int pageNumber = 1, int pageSize = 10)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -63,6 +76,8 @@ namespace ProductApp.API.Controllers
         /// <param name="productDto"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -81,6 +96,9 @@ namespace ProductApp.API.Controllers
         /// <param name="productDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -102,6 +120,8 @@ namespace ProductApp.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var result = await _productService.DeleteProductAsync(id);
