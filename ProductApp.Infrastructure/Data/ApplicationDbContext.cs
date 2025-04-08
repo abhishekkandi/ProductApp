@@ -17,6 +17,10 @@ namespace ProductApp.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.ProductName)
+                .IsUnique();
         }
     }
 

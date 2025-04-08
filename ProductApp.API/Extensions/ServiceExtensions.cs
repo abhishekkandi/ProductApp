@@ -12,6 +12,7 @@ using FluentValidation.AspNetCore;
 using ProductApp.Application.Mapping;
 using AutoMapper;
 using ProductApp.API.Filters;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace ProductApp.API.Extensions
 {
@@ -47,6 +48,14 @@ namespace ProductApp.API.Extensions
                 options.ReportApiVersions = true;
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
                 options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            });
+
+            services.Configure<GzipCompressionProviderOptions>(options => 
+                options.Level = System.IO.Compression.CompressionLevel.Fastest
+            );
+            services.AddResponseCompression(options => {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
             });
             
             services.ConfigureSwagger();
