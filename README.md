@@ -36,3 +36,7 @@ This document provides detailed instructions for setting up the environment and 
 - Role Authorization: Currently, there is no role-based authorization implemented on the APIs. This means that all endpoints are accessible without any role restrictions. Future updates may include role-based access control to enhance security.
 
 - Monitoring and Logging: Integrate monitoring and logging solutions to track application performance and errors.
+
+## MY TODO
+- Add Different Dto for Create, Update
+- Validate if UnitOfWork is working properly
