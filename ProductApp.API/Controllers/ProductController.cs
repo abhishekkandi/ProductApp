@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProductApp.Application.DTOS;
 using ProductApp.Application.Interfaces;
@@ -16,8 +15,7 @@ namespace ProductApp.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly Serilog.ILogger _logger;
-        private Stopwatch _stopwatch;
+        private readonly Serilog.ILogger _logger;        
 
         /// <summary>
         /// Product Controller ctor
@@ -26,7 +24,6 @@ namespace ProductApp.API.Controllers
         public ProductController(IProductService productService)
         {
             _productService = productService;
-            _stopwatch = new Stopwatch();
             _logger = Log.Logger.ForContext<ProductController>();
         }
  
@@ -40,10 +37,7 @@ namespace ProductApp.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProduct(int id)
         {
-            _stopwatch.Start();
             var product = await _productService.GetProductByIdAsync(id);
-            _stopwatch.Stop();
-            _logger.Information(string.Format("Get Product By Id API | Time Elapsed: {0}ms", _stopwatch.ElapsedMilliseconds));
             if (product == null)
             {
                 return NotFound();
