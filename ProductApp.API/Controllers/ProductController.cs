@@ -74,11 +74,6 @@ namespace ProductApp.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
- 
             var createdProduct = await _productService.CreateProductAsync(productDto);
             return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
         }
@@ -95,11 +90,6 @@ namespace ProductApp.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
- 
             var updatedProduct = await _productService.UpdateProductAsync(id, productDto);
             if (updatedProduct == null)
             {
