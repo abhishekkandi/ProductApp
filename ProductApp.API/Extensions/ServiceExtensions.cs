@@ -23,6 +23,7 @@ namespace ProductApp.API.Extensions
             // Add services to the container.
             services.AddControllers(options => {
                 options.Filters.Add<GlobalExceptionFilter>();
+                options.Filters.Add<ExecutionTimeFilter>();
             })
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
             

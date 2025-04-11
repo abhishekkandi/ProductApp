@@ -1,3 +1,4 @@
+using ProductApp.API.Middleware;
 
 namespace ProductApp.API.Extensions
 {
@@ -7,6 +8,8 @@ namespace ProductApp.API.Extensions
         {
 
             app.UseCors("AllowAll");
+
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
